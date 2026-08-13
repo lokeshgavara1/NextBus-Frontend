@@ -2,6 +2,7 @@
 // Karnataka routes connecting major cities
 
 export const MOCK_ROUTES = [
+  // KARNATAKA ROUTES
   {
     id: 1,
     route_number: '10K',
@@ -40,6 +41,48 @@ export const MOCK_ROUTES = [
     route_name: 'Bangalore to Hospet (Hampi) - Heritage Route',
     start_stop: 'Bangalore Majestic Bus Stand',
     end_stop: 'Hospet Bus Stand',
+    created_at: new Date().toISOString(),
+  },
+
+  // VISAKHAPATNAM ROUTES
+  {
+    id: 6,
+    route_number: '1V',
+    route_name: 'Visakhapatnam to Hyderabad - Express',
+    start_stop: 'Visakhapatnam RTC Complex',
+    end_stop: 'Hyderabad Jubilee Bus Station',
+    created_at: new Date().toISOString(),
+  },
+  {
+    id: 7,
+    route_number: '2V',
+    route_name: 'Visakhapatnam to Bangalore - Sleeper',
+    start_stop: 'Visakhapatnam Central Bus Stand',
+    end_stop: 'Bangalore Majestic',
+    created_at: new Date().toISOString(),
+  },
+  {
+    id: 8,
+    route_number: '3V',
+    route_name: 'Visakhapatnam to Chennai - AC Coach',
+    start_stop: 'Visakhapatnam Beach Station',
+    end_stop: 'Chennai Central Bus Terminal',
+    created_at: new Date().toISOString(),
+  },
+  {
+    id: 9,
+    route_number: '4V',
+    route_name: 'Visakhapatnam to Pune - Premium Sleeper',
+    start_stop: 'Visakhapatnam Port Town',
+    end_stop: 'Pune Central Bus Terminal',
+    created_at: new Date().toISOString(),
+  },
+  {
+    id: 10,
+    route_number: '5V',
+    route_name: 'Visakhapatnam to Goa - Coastal Route',
+    start_stop: 'Visakhapatnam RTC Complex',
+    end_stop: 'Panaji Bus Stand',
     created_at: new Date().toISOString(),
   },
 ]
@@ -191,6 +234,71 @@ export const MOCK_STOPS = [
     longitude: 76.3904,
     stop_order: 4,
   },
+
+  // VISAKHAPATNAM STOPS
+  {
+    stop_id: 21,
+    stop_name: 'Visakhapatnam RTC Complex',
+    latitude: 17.6869,
+    longitude: 83.2185,
+    stop_order: 1,
+  },
+  {
+    stop_id: 22,
+    stop_name: 'Visakhapatnam Central Bus Stand',
+    latitude: 17.7258,
+    longitude: 83.3185,
+    stop_order: 1,
+  },
+  {
+    stop_id: 23,
+    stop_name: 'Visakhapatnam Beach Station',
+    latitude: 17.6959,
+    longitude: 83.2240,
+    stop_order: 1,
+  },
+  {
+    stop_id: 24,
+    stop_name: 'Visakhapatnam Port Town',
+    latitude: 17.6869,
+    longitude: 83.2185,
+    stop_order: 1,
+  },
+  {
+    stop_id: 25,
+    stop_name: 'Visakhapatnam Kailasagiri',
+    latitude: 17.6915,
+    longitude: 83.2176,
+    stop_order: 2,
+  },
+  {
+    stop_id: 26,
+    stop_name: 'Ongole',
+    latitude: 14.6349,
+    longitude: 79.6533,
+    stop_order: 2,
+  },
+  {
+    stop_id: 27,
+    stop_name: 'Nellore',
+    latitude: 14.4426,
+    longitude: 79.9864,
+    stop_order: 2,
+  },
+  {
+    stop_id: 28,
+    stop_name: 'Chennai Central Bus Terminal',
+    latitude: 13.1939,
+    longitude: 80.1829,
+    stop_order: 3,
+  },
+  {
+    stop_id: 29,
+    stop_name: 'Panaji Bus Stand',
+    latitude: 15.4909,
+    longitude: 73.8278,
+    stop_order: 3,
+  },
 ]
 
 export const MOCK_ROUTE_STOPS: Record<number, any[]> = {
@@ -227,6 +335,41 @@ export const MOCK_ROUTE_STOPS: Record<number, any[]> = {
     { stop_id: 18, stop_name: 'Chitradurga Fort', latitude: 14.2250, longitude: 75.7431, stop_order: 2 },
     { stop_id: 19, stop_name: 'Davangere', latitude: 14.4644, longitude: 75.9218, stop_order: 3 },
     { stop_id: 20, stop_name: 'Hospet Bus Stand', latitude: 15.2671, longitude: 76.3904, stop_order: 4 },
+  ],
+
+  // Route 6: Visakhapatnam to Hyderabad
+  6: [
+    { stop_id: 21, stop_name: 'Visakhapatnam RTC Complex', latitude: 17.6869, longitude: 83.2185, stop_order: 1 },
+    { stop_id: 26, stop_name: 'Ongole', latitude: 14.6349, longitude: 79.6533, stop_order: 2 },
+    { stop_id: 14, stop_name: 'Hyderabad Jubilee Bus Station', latitude: 17.3850, longitude: 78.4867, stop_order: 3 },
+  ],
+
+  // Route 7: Visakhapatnam to Bangalore
+  7: [
+    { stop_id: 22, stop_name: 'Visakhapatnam Central Bus Stand', latitude: 17.7258, longitude: 83.3185, stop_order: 1 },
+    { stop_id: 26, stop_name: 'Ongole', latitude: 14.6349, longitude: 79.6533, stop_order: 2 },
+    { stop_id: 2, stop_name: 'Bangalore Majestic', latitude: 12.9705, longitude: 77.5901, stop_order: 3 },
+  ],
+
+  // Route 8: Visakhapatnam to Chennai
+  8: [
+    { stop_id: 23, stop_name: 'Visakhapatnam Beach Station', latitude: 17.6959, longitude: 83.2240, stop_order: 1 },
+    { stop_id: 27, stop_name: 'Nellore', latitude: 14.4426, longitude: 79.9864, stop_order: 2 },
+    { stop_id: 28, stop_name: 'Chennai Central Bus Terminal', latitude: 13.1939, longitude: 80.1829, stop_order: 3 },
+  ],
+
+  // Route 9: Visakhapatnam to Pune
+  9: [
+    { stop_id: 24, stop_name: 'Visakhapatnam Port Town', latitude: 17.6869, longitude: 83.2185, stop_order: 1 },
+    { stop_id: 9, stop_name: 'Belgaum', latitude: 15.8527, longitude: 74.4976, stop_order: 2 },
+    { stop_id: 11, stop_name: 'Pune Central Bus Terminal', latitude: 18.5204, longitude: 73.8567, stop_order: 3 },
+  ],
+
+  // Route 10: Visakhapatnam to Goa
+  10: [
+    { stop_id: 21, stop_name: 'Visakhapatnam RTC Complex', latitude: 17.6869, longitude: 83.2185, stop_order: 1 },
+    { stop_id: 25, stop_name: 'Visakhapatnam Kailasagiri', latitude: 17.6915, longitude: 83.2176, stop_order: 2 },
+    { stop_id: 29, stop_name: 'Panaji Bus Stand', latitude: 15.4909, longitude: 73.8278, stop_order: 3 },
   ],
 }
 
@@ -359,6 +502,142 @@ export const MOCK_BUSES = [
     stop_etas: [
       { stop_id: 19, stop_name: 'Davangere', latitude: 14.4644, longitude: 75.9218, eta_seconds: 360 },
       { stop_id: 20, stop_name: 'Hospet Bus Stand', latitude: 15.2671, longitude: 76.3904, eta_seconds: 2400 },
+    ],
+  },
+
+  // VISAKHAPATNAM BUSES
+  // Visakhapatnam to Hyderabad Express
+  {
+    trip_id: 201,
+    id: 'BUS_201',
+    busId: '201',
+    route_id: 6,
+    route_number: '1V',
+    routeNo: '1V',
+    bus_number: 'AP-VZG-2001',
+    license_plate: 'AP 31 AZ 2001',
+    latitude: 14.6349,
+    longitude: 79.6533,
+    lat: 14.6349,
+    lng: 79.6533,
+    speed: 72,
+    occupancy_count: 44,
+    crowdLevel: 9,
+    capacity: 50,
+    status: 'LIVE',
+    vision_confidence_score: 0.94,
+    last_updated: new Date().toISOString(),
+    stop_etas: [
+      { stop_id: 26, stop_name: 'Ongole', latitude: 14.6349, longitude: 79.6533, eta_seconds: 120 },
+      { stop_id: 14, stop_name: 'Hyderabad Jubilee Bus Station', latitude: 17.3850, longitude: 78.4867, eta_seconds: 3600 },
+    ],
+  },
+
+  // Visakhapatnam to Bangalore Sleeper
+  {
+    trip_id: 202,
+    id: 'BUS_202',
+    busId: '202',
+    route_id: 7,
+    route_number: '2V',
+    routeNo: '2V',
+    bus_number: 'AP-VZG-2002',
+    license_plate: 'AP 31 BA 2002',
+    latitude: 14.6349,
+    longitude: 79.6533,
+    lat: 14.6349,
+    lng: 79.6533,
+    speed: 68,
+    occupancy_count: 46,
+    crowdLevel: 9,
+    capacity: 50,
+    status: 'LIVE',
+    vision_confidence_score: 0.92,
+    last_updated: new Date().toISOString(),
+    stop_etas: [
+      { stop_id: 26, stop_name: 'Ongole', latitude: 14.6349, longitude: 79.6533, eta_seconds: 240 },
+      { stop_id: 2, stop_name: 'Bangalore Majestic', latitude: 12.9705, longitude: 77.5901, eta_seconds: 14400 },
+    ],
+  },
+
+  // Visakhapatnam to Chennai AC Coach
+  {
+    trip_id: 203,
+    id: 'BUS_203',
+    busId: '203',
+    route_id: 8,
+    route_number: '3V',
+    routeNo: '3V',
+    bus_number: 'AP-VZG-2003',
+    license_plate: 'AP 31 BB 2003',
+    latitude: 14.4426,
+    longitude: 79.9864,
+    lat: 14.4426,
+    lng: 79.9864,
+    speed: 70,
+    occupancy_count: 40,
+    crowdLevel: 8,
+    capacity: 50,
+    status: 'APPROACHING STOP',
+    vision_confidence_score: 0.95,
+    last_updated: new Date().toISOString(),
+    stop_etas: [
+      { stop_id: 27, stop_name: 'Nellore', latitude: 14.4426, longitude: 79.9864, eta_seconds: 300 },
+      { stop_id: 28, stop_name: 'Chennai Central Bus Terminal', latitude: 13.1939, longitude: 80.1829, eta_seconds: 5400 },
+    ],
+  },
+
+  // Visakhapatnam to Pune Premium Sleeper
+  {
+    trip_id: 204,
+    id: 'BUS_204',
+    busId: '204',
+    route_id: 9,
+    route_number: '4V',
+    routeNo: '4V',
+    bus_number: 'AP-VZG-2004',
+    license_plate: 'AP 31 BC 2004',
+    latitude: 15.8527,
+    longitude: 74.4976,
+    lat: 15.8527,
+    lng: 74.4976,
+    speed: 75,
+    occupancy_count: 48,
+    crowdLevel: 10,
+    capacity: 50,
+    status: 'LIVE',
+    vision_confidence_score: 0.93,
+    last_updated: new Date().toISOString(),
+    stop_etas: [
+      { stop_id: 9, stop_name: 'Belgaum', latitude: 15.8527, longitude: 74.4976, eta_seconds: 180 },
+      { stop_id: 11, stop_name: 'Pune Central Bus Terminal', latitude: 18.5204, longitude: 73.8567, eta_seconds: 7200 },
+    ],
+  },
+
+  // Visakhapatnam to Goa Coastal Route
+  {
+    trip_id: 205,
+    id: 'BUS_205',
+    busId: '205',
+    route_id: 10,
+    route_number: '5V',
+    routeNo: '5V',
+    bus_number: 'AP-VZG-2005',
+    license_plate: 'AP 31 BD 2005',
+    latitude: 17.6915,
+    longitude: 83.2176,
+    lat: 17.6915,
+    lng: 83.2176,
+    speed: 65,
+    occupancy_count: 35,
+    crowdLevel: 7,
+    capacity: 50,
+    status: 'LIVE',
+    vision_confidence_score: 0.97,
+    last_updated: new Date().toISOString(),
+    stop_etas: [
+      { stop_id: 25, stop_name: 'Visakhapatnam Kailasagiri', latitude: 17.6915, longitude: 83.2176, eta_seconds: 200 },
+      { stop_id: 29, stop_name: 'Panaji Bus Stand', latitude: 15.4909, longitude: 73.8278, eta_seconds: 6000 },
     ],
   },
 ]
