@@ -59,14 +59,13 @@ export const useTrip = () => {
           currentStopIndex: 0,
         };
         setTrip(active);
-        setActiveTripId(backendTrip.id); // hands the trip_id to the GPS Ping publisher
+        setActiveTripId(backendTrip.id);
         return active;
       } catch (err: any) {
         const msg =
           err?.response?.data?.message ||
           (err instanceof Error ? err.message : 'Failed to start trip');
         setError(msg);
-        throw err;
       } finally {
         setLoading(false);
       }
@@ -85,14 +84,13 @@ export const useTrip = () => {
     try {
       const result = await tripService.endTrip(trip.id);
       setTrip(null);
-      setActiveTripId(null); // stops GPS publishing
+      setActiveTripId(null);
       return result;
     } catch (err: any) {
       const msg =
         err?.response?.data?.message ||
         (err instanceof Error ? err.message : 'Failed to end trip');
       setError(msg);
-      throw err;
     } finally {
       setLoading(false);
     }
