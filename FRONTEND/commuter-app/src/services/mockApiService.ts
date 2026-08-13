@@ -42,10 +42,36 @@ export const mockApiService = {
     await new Promise((resolve) => setTimeout(resolve, 800))
 
     try {
-      const results = MOCK_ROUTES.map((route) => {
+      // Filter routes based on origin and destination
+      let filteredRoutes = MOCK_ROUTES
+
+      // If from and to are provided, filter routes that can make this journey
+      if (from && to) {
+        filteredRoutes = MOCK_ROUTES.filter((route) => {
+          const stops = MOCK_ROUTE_STOPS[route.id] || []
+          const stopNames = stops.map((s) => s.stop_name.toLowerCase())
+          const fromLower = from.toLowerCase()
+          const toLower = to.toLowerCase()
+
+          // Check if route contains both stops or is connecting city
+          const hasFrom = stopNames.some((s) => s.includes(fromLower.split(' ')[0]))
+          const hasTo = stopNames.some((s) => s.includes(toLower.split(' ')[0]))
+
+          return hasFrom || hasTo || stops.length > 0
+        })
+      }
+
+      // If no routes found based on stops, return the most relevant routes
+      if (filteredRoutes.length === 0) {
+        filteredRoutes = MOCK_ROUTES.slice(0, 5)
+      }
+
+      const results = filteredRoutes.map((route) => {
         const liveBus = MOCK_BUSES.find((b) => b.route_id === route.id)
         const stops = MOCK_ROUTE_STOPS[route.id] || []
-        const eta = liveBus ? Math.floor(Math.random() * 15) + 5 : Math.floor(Math.random() * 20) + 10
+        const distance = Math.floor((Math.random() * 200) + 100)
+        const eta = liveBus ? Math.floor(Math.random() * 15) + 5 : Math.floor(Math.random() * 30) + 15
+        const fare = Math.floor(Math.random() * 300) + 100
 
         return {
           route,
@@ -53,9 +79,9 @@ export const mockApiService = {
           eta,
           etaStatus: liveBus ? 'LIVE' : 'SCHEDULED',
           crowd: Math.floor(Math.random() * 100),
-          fare: 15,
+          fare,
           femaleOnly: false,
-          distance: Math.floor((Math.random() * 15) * 10) / 10,
+          distance: distance / 10,
           stops,
         }
       })
