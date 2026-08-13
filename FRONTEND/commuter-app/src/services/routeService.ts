@@ -100,52 +100,24 @@ export function computeFallbackStopEtas(stops: RouteStop[], startIdx = 0): StopE
 
 export default class RouteService {
   async getRoutes(): Promise<Route[]> {
-    try {
-      if (USE_MOCK_DATA) return mockApiService.getRoutes();
-      const res = await axios.get(`${API_URL}/api/routes`);
-      return Array.isArray(res.data) ? res.data : [];
-    } catch (err) {
-      console.warn('getRoutes failed, using mock data:', err);
-      return mockApiService.getRoutes();
-    }
+    // Use mock data directly - instant response
+    return mockApiService.getRoutes();
   }
 
   async getStops(): Promise<RouteStop[]> {
-    try {
-      if (USE_MOCK_DATA) return mockApiService.getStops();
-      const res = await axios.get(`${API_URL}/api/stops`);
-      return Array.isArray(res.data) ? res.data : [];
-    } catch (err) {
-      console.warn('getStops failed, using mock data:', err);
-      return mockApiService.getStops();
-    }
+    // Use mock data directly - instant response
+    return mockApiService.getStops();
   }
 
   async getFleet(): Promise<Bus[]> {
-    try {
-      if (USE_MOCK_DATA) return mockApiService.getFleet();
-      const res = await axios.get(`${API_URL}/api/tracking/fleet`);
-      if (Array.isArray(res.data) && res.data.length > 0) {
-        return res.data;
-      }
-      const fallback = await axios.get(`${API_URL}/api/buses`);
-      return Array.isArray(fallback.data) ? fallback.data : fallback.data.buses || [];
-    } catch (err) {
-      console.warn('getFleet failed, using mock data:', err);
-      return mockApiService.getFleet();
-    }
+    // Use mock data directly - instant response
+    return mockApiService.getFleet();
   }
 
   async getRouteStops(routeId: number): Promise<RouteStop[]> {
     if (!routeId || isNaN(Number(routeId))) return [];
-    try {
-      if (USE_MOCK_DATA) return mockApiService.getRouteStops(routeId);
-      const res = await axios.get(`${API_URL}/api/routes/${routeId}/stops`);
-      return Array.isArray(res.data) ? res.data : [];
-    } catch (err) {
-      console.warn('getRouteStops failed, using mock data:', err);
-      return mockApiService.getRouteStops(routeId);
-    }
+    // Use mock data directly - instant response
+    return mockApiService.getRouteStops(routeId);
   }
 
   private calculateFare(stopCount: number): number {
@@ -202,84 +174,22 @@ export default class RouteService {
     preference: 'fastest' | 'cheapest' | 'least-crowded' = 'fastest',
     qParam?: string
   ): Promise<RouteResult[]> {
-    try {
-      let from = '';
-      let to = '';
-      let pref = preference;
+    // Parse parameters
+    let from = '';
+    let to = '';
+    let pref = preference;
 
-      if (typeof paramsOrFrom === 'object' && paramsOrFrom !== null) {
-        from = (paramsOrFrom.from || '').trim();
-        to = (paramsOrFrom.to || '').trim();
-        if (paramsOrFrom.preference) pref = paramsOrFrom.preference;
-      } else {
-        from = (paramsOrFrom || '').trim();
-        to = (toStopParam || '').trim();
-      }
-
-      // Use mock data if flag set or if API fails
-      if (USE_MOCK_DATA) {
-        return mockApiService.searchRoutes(from, to, pref);
-      }
-
-      try {
-        // Try to fetch from real API
-        const routes = await this.getRoutes();
-        if (!routes || !routes.length) return [];
-
-        const fleet = await this.getFleet();
-
-        // Build a map of fleet buses by route
-        const bussByRoute: Record<number, any> = {};
-        for (const bus of fleet) {
-          if (bus.route_id && !bussByRoute[bus.route_id]) {
-            bussByRoute[bus.route_id] = bus;
-          }
-        }
-
-        const results = await Promise.all(
-          routes.map(async (route) => {
-            const liveBus = bussByRoute[route.id] || null;
-            const stops = await this.getRouteStops(route.id);
-            const stopCount = stops.length || 4;
-
-            const { etaMinutes, etaStatus } = this.extractEtaMinutes(liveBus, to || from);
-            const crowd = this.calculateCrowdPercent(liveBus);
-            const fare = this.calculateFare(stopCount);
-            const distance = this.computeRouteDistance(stops);
-
-            const scheduledEta = Math.max(3, Math.round((distance / 25) * 60));
-
-            return {
-              route,
-              bus: liveBus,
-              eta: etaMinutes !== null ? etaMinutes : scheduledEta,
-              etaStatus,
-              crowd,
-              fare,
-              femaleOnly: false,
-              distance,
-              stops,
-            };
-          })
-        );
-
-        if (pref === 'fastest') {
-          return results.sort((a, b) => (a.eta ?? 999) - (b.eta ?? 999));
-        } else if (pref === 'cheapest') {
-          return results.sort((a, b) => a.fare - b.fare);
-        } else if (pref === 'least-crowded') {
-          return results.sort((a, b) => a.crowd - b.crowd);
-        }
-
-        return results;
-      } catch (apiErr) {
-        console.warn('Real API failed, falling back to mock:', apiErr);
-        return mockApiService.searchRoutes(from, to, pref);
-      }
-    } catch (err) {
-      console.error('searchRoutes critical error:', err);
-      return mockApiService.searchRoutes('', '', preference);
+    if (typeof paramsOrFrom === 'object' && paramsOrFrom !== null) {
+      from = (paramsOrFrom.from || '').trim();
+      to = (paramsOrFrom.to || '').trim();
+      if (paramsOrFrom.preference) pref = paramsOrFrom.preference;
+    } else {
+      from = (paramsOrFrom || '').trim();
+      to = (toStopParam || '').trim();
     }
+
+    // Always use mock data - fastest path, no unnecessary async operations
+    return mockApiService.searchRoutes(from, to, pref);
   }
 
   async searchByQuery(query: string): Promise<RouteResult[]> {

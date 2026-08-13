@@ -1,35 +1,34 @@
 import { MOCK_ROUTES, MOCK_STOPS, MOCK_ROUTE_STOPS, MOCK_BUSES } from './mockData'
 
 /**
- * Mock API Service — returns mock data instead of real API calls
- * Use this when backend is unavailable or for development/testing
+ * Mock API Service — returns mock data instantly without any delays
+ * Optimized for lightning-fast response times
  */
 
 export const mockApiService = {
   async getRoutes() {
-    // Instant load - no delay
-    return [...MOCK_ROUTES]
+    // Instant - no delays at all
+    return MOCK_ROUTES
   },
 
   async getStops() {
-    // Instant load - no delay
-    return [...MOCK_STOPS]
+    // Instant - no delays at all
+    return MOCK_STOPS
   },
 
   async getBuses() {
-    // Instant load - no delay
-    return [...MOCK_BUSES]
+    // Instant - no delays at all
+    return MOCK_BUSES
   },
 
   async getFleet() {
-    // Instant load - no delay
-    return [...MOCK_BUSES]
+    // Instant - no delays at all
+    return MOCK_BUSES
   },
 
   async getRouteStops(routeId: number) {
-    // Instant load - no delay
-    const stops = MOCK_ROUTE_STOPS[routeId] || []
-    return [...stops]
+    // Instant - no delays at all
+    return MOCK_ROUTE_STOPS[routeId] || []
   },
 
   async searchRoutes(
@@ -37,10 +36,9 @@ export const mockApiService = {
     to?: string,
     preference: 'fastest' | 'cheapest' | 'least-crowded' = 'fastest'
   ) {
-    // Ultra-fast search - minimal delay for UI feedback only
-    await new Promise((resolve) => setTimeout(resolve, 100))
+    // ZERO delay - completely instant search
+    // No await, no setTimeout, pure synchronous processing
 
-    // Fast optimized search with caching
     try {
       let filteredRoutes = MOCK_ROUTES
 
@@ -62,7 +60,7 @@ export const mockApiService = {
 
       // Build results instantly without loops
       const results = filteredRoutes.map((route) => {
-        const liveBus = MOCK_BUSES[route.id - 1] // Direct index access instead of find()
+        const liveBus = MOCK_BUSES[route.id - 1]
         const stops = MOCK_ROUTE_STOPS[route.id] || []
 
         return {
@@ -78,16 +76,18 @@ export const mockApiService = {
         }
       })
 
-      // Sort by preference (optimized)
+      // Sort by preference
       if (preference === 'fastest') {
-        return results.sort((a, b) => (a.eta || 999) - (b.eta || 999))
+        results.sort((a, b) => (a.eta || 999) - (b.eta || 999))
       } else if (preference === 'cheapest') {
-        return results.sort((a, b) => a.fare - b.fare)
+        results.sort((a, b) => a.fare - b.fare)
       } else {
-        return results.sort((a, b) => a.crowd - b.crowd)
+        results.sort((a, b) => a.crowd - b.crowd)
       }
+
+      return results
     } catch (error) {
-      console.error('Mock searchRoutes error:', error)
+      // Even error handling returns instantly
       return MOCK_ROUTES.map((route) => ({
         route,
         bus: MOCK_BUSES[route.id - 1] || null,

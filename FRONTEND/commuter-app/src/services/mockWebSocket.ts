@@ -25,19 +25,17 @@ export class MockWebSocket {
   onerror: ((event: Event) => void) | null = null
   onclose: ((event: CloseEvent) => void) | null = null
 
-  // Simulate connection
+  // Connect instantly - no delays at all
   connect() {
-    // Minimal connection delay for instant response
-    setTimeout(() => {
-      this.readyState = WebSocket.OPEN
-      this.triggerEvent('open', new Event('open'))
+    // Zero delay - immediate connection
+    this.readyState = WebSocket.OPEN
+    this.triggerEvent('open', new Event('open'))
 
-      // Send initial snapshot immediately
-      this.sendSnapshot()
+    // Send initial snapshot immediately
+    this.sendSnapshot()
 
-      // Start continuous bus updates
-      this.startBusUpdates()
-    }, 50)
+    // Start continuous bus updates
+    this.startBusUpdates()
   }
 
   // Send initial snapshot of all buses
