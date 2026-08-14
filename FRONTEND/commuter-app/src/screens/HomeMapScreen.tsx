@@ -27,6 +27,7 @@ export default function HomeMapScreen({ navigation }: any) {
   const {
     userLocation: storeUserLoc,
     setUserLocation: storeUserLocation,
+    selectedCity,
     selectedRoute,
     selectedBus,
     setSelectedBus,
@@ -108,10 +109,11 @@ export default function HomeMapScreen({ navigation }: any) {
 
   const recenter = () => {
     userTrackingRef.current = true
+    const loc = getDefaultLocation()
     mapRef.current?.animateToRegion(
       {
-        latitude: userLocation?.lat || storeUserLoc?.lat || 17.7231,
-        longitude: userLocation?.lng || storeUserLoc?.lng || 83.3013,
+        latitude: userLocation?.lat || storeUserLoc?.lat || loc.lat,
+        longitude: userLocation?.lng || storeUserLoc?.lng || loc.lng,
         latitudeDelta: 0.06,
         longitudeDelta: 0.06,
       },
@@ -139,8 +141,17 @@ export default function HomeMapScreen({ navigation }: any) {
     longitude: parseFloat(s.longitude),
   }))
 
-  const defaultUserLat = userLocation?.lat || storeUserLoc?.lat || 17.7231
-  const defaultUserLng = userLocation?.lng || storeUserLoc?.lng || 83.3013
+  // Get default location based on selected city
+  const getDefaultLocation = () => {
+    if (selectedCity === 'karnataka') {
+      return { lat: 12.9716, lng: 77.5946 } // Bangalore
+    }
+    return { lat: 17.7231, lng: 83.3013 } // Visakhapatnam
+  }
+
+  const defaultLocation = getDefaultLocation()
+  const defaultUserLat = userLocation?.lat || storeUserLoc?.lat || defaultLocation.lat
+  const defaultUserLng = userLocation?.lng || storeUserLoc?.lng || defaultLocation.lng
 
   if (loading) {
     return (

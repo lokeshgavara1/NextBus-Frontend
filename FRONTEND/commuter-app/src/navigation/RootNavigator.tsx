@@ -14,6 +14,7 @@ import OTPScreen from '../screens/OTPScreen'
 import HomeDashboardScreen from '../screens/HomeDashboardScreen'
 import HomeMapScreen from '../screens/HomeMapScreen'
 import SearchRoutesScreen from '../screens/SearchRoutesScreen'
+import CitySelectionScreen from '../screens/CitySelectionScreen'
 import ActiveAlertsScreen from '../screens/ActiveAlertsScreen'
 import ProfileScreen from '../screens/ProfileScreen'
 
@@ -27,6 +28,28 @@ import BusReportCardScreen from '../screens/BusReportCardScreen'
 
 const Stack = createNativeStackNavigator()
 const Tab = createBottomTabNavigator()
+
+// Search Stack Navigator - contains city selection and search routes
+function SearchStack() {
+  const { selectedCity } = useCommuterStore()
+
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      {!selectedCity ? (
+        <Stack.Screen
+          name="CitySelection"
+          component={CitySelectionScreen}
+          options={{ animationEnabled: false }}
+        />
+      ) : null}
+      <Stack.Screen
+        name="SearchRoutes"
+        component={SearchRoutesScreen}
+        options={{ animationEnabled: false }}
+      />
+    </Stack.Navigator>
+  )
+}
 
 function AppTabs() {
   return (
@@ -69,7 +92,7 @@ function AppTabs() {
       />
       <Tab.Screen
         name="Search"
-        component={SearchRoutesScreen}
+        component={SearchStack}
         options={{
           tabBarIcon: ({ color, size }) => (
             <MaterialIcons name="search" size={size} color={color} />
