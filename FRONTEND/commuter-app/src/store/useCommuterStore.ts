@@ -94,6 +94,9 @@ export interface BusPass {
 }
 
 interface CommuterStoreState {
+  // City Selection
+  selectedCity: string | null;
+
   // Real-time Telemetry & Live Map
   busPositions: Record<string, BusPosition>;
   selectedBus: BusPosition | any | null;
@@ -132,6 +135,7 @@ interface CommuterStoreState {
   hasOnboarded: boolean;
 
   // Actions
+  setSelectedCity: (city: string | null) => void;
   setBusPositions: (positions: Record<string, BusPosition>) => void;
   updateBusPosition: (busId: string, data: Partial<BusPosition>) => void;
   removeBusPosition: (busId: string) => void;
@@ -180,6 +184,7 @@ const STORAGE_PASS = '@nxtbus_active_pass';
 
 export const useCommuterStore = create<CommuterStoreState>((set, get) => ({
   // Initial State
+  selectedCity: null,
   busPositions: {},
   selectedBus: null,
   selectedRoute: null,
@@ -210,6 +215,8 @@ export const useCommuterStore = create<CommuterStoreState>((set, get) => ({
   hasOnboarded: false,
 
   // Actions
+  setSelectedCity: (city) => set({ selectedCity: city }),
+
   setBusPositions: (positions) => set({ busPositions: positions }),
 
   updateBusPosition: (busId, data) =>

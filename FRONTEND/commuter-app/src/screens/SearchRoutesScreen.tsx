@@ -26,7 +26,17 @@ export default function SearchRoutesScreen({ navigation }: any) {
   const [showToModal, setShowToModal] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [stopsLoading, setStopsLoading] = useState(true)
-  const { setSelectedRoute, setSelectedBus, addSavedRoute } = useCommuterStore()
+  const { selectedCity, setSelectedRoute, setSelectedBus, addSavedRoute } = useCommuterStore()
+
+  // Check if city is selected, if not show city selection
+  useEffect(() => {
+    if (!selectedCity) {
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'CitySelection' }],
+      })
+    }
+  }, [selectedCity, navigation])
 
   // Load all stops on component mount
   useEffect(() => {
@@ -37,7 +47,36 @@ export default function SearchRoutesScreen({ navigation }: any) {
     try {
       setStopsLoading(true)
       const allStops = await routeService.getStops()
-      setStops(allStops || [])
+
+      // Filter stops by city
+      if (selectedCity === 'karnataka') {
+        // Karnataka stops (IDs 1-20)
+        const karnatakaCityNames = [
+          'Bangalore', 'Mysore', 'Channapatna', 'Belgaum', 'Pune',
+          'Hyderabad', 'Mangalore', 'Tumkur', 'Chikmagalur', 'Hospet',
+          'Chitradurga', 'Davangere', 'Kolar', 'Tandur', 'Electronic City'
+        ]
+        const filtered = allStops.filter((stop) =>
+          karnatakaCityNames.some((city) =>
+            stop.stop_name.toLowerCase().includes(city.toLowerCase())
+          )
+        )
+        setStops(filtered)
+      } else if (selectedCity === 'visakhapatnam') {
+        // Visakhapatnam stops (city names)
+        const vizagCityNames = [
+          'Visakhapatnam', 'Vizag', 'Hyderabad', 'Bangalore', 'Chennai',
+          'Pune', 'Ongole', 'Nellore', 'Goa', 'Panaji', 'Belgaum', 'Kailasagiri'
+        ]
+        const filtered = allStops.filter((stop) =>
+          vizagCityNames.some((city) =>
+            stop.stop_name.toLowerCase().includes(city.toLowerCase())
+          )
+        )
+        setStops(filtered)
+      } else {
+        setStops(allStops || [])
+      }
     } catch (err) {
       console.error('Failed to load stops:', err)
       setStops([])
@@ -92,11 +131,19 @@ export default function SearchRoutesScreen({ navigation }: any) {
         return
       }
 
-      if (res.length === 0) {
+      // Filter results by selected city
+      let filteredResults = res
+      if (selectedCity === 'karnataka') {
+        filteredResults = res.filter((r) => r.route?.route_number?.includes('K'))
+      } else if (selectedCity === 'visakhapatnam') {
+        filteredResults = res.filter((r) => r.route?.route_number?.includes('V'))
+      }
+
+      if (filteredResults.length === 0) {
         setResults([])
         setError(null)
       } else {
-        setResults(res)
+        setResults(filteredResults)
         setError(null)
       }
     } catch (err) {
@@ -172,10 +219,28 @@ export default function SearchRoutesScreen({ navigation }: any) {
 
         {/* Plan your trip card */}
         <View style={styles.planCard}>
-          <Text style={styles.planTitle}>Plan your trip</Text>
-          <Text style={styles.planSub}>
-            Find the quickest route across Visakhapatnam.
-          </Text>
+          <View style={styles.planHeader}>
+            <View>
+              <Text style={styles.planTitle}>Plan your trip</Text>
+              <Text style={styles.planSub}>
+                {selectedCity === 'karnataka'
+                  ? 'Find the quickest route across Karnataka.'
+                  : 'Find the quickest route across Visakhapatnam.'}
+              </Text>
+            </View>
+            <TouchableOpacity
+              style={styles.changeCityButton}
+              onPress={() => navigation.reset({
+                index: 0,
+                routes: [{ name: 'CitySelection' }],
+              })}
+            >
+              <Text style={styles.changeCityText}>
+                {selectedCity === 'karnataka' ? '🏛️' : '🌊'}
+              </Text>
+              <Text style={styles.changeCityLabel}>Change</Text>
+            </TouchableOpacity>
+          </View>
 
           {/* Stop Selection Container */}
           <View style={styles.stopSelectionContainer}>
@@ -463,7 +528,29 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: BRAND.textSecondary,
     marginTop: 4,
+    marginBottom: 0,
+  },
+  planHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
     marginBottom: 18,
+  },
+  changeCityButton: {
+    backgroundColor: BRAND.surfaceMuted,
+    borderRadius: BRAND.radius.sm,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    alignItems: 'center',
+    gap: 4,
+  },
+  changeCityText: {
+    fontSize: 18,
+  },
+  changeCityLabel: {
+    fontSize: 10,
+    fontWeight: '700',
+    color: BRAND.text,
   },
   inputWrap: {
     flexDirection: 'row',
